@@ -1,10 +1,3 @@
-# Create a GitHub Action Using TypeScript
-
-[![GitHub Super-Linter](https://github.com/PicoCentauri/comment-artifact/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/PicoCentauri/comment-artifact/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/PicoCentauri/comment-artifact/actions/workflows/check-dist.yml/badge.svg)](https://github.com/PicoCentauri/comment-artifact/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/PicoCentauri/comment-artifact/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/PicoCentauri/comment-artifact/actions/workflows/codeql-analysis.yml)
-
 # Add artifact link to Pull Requests
 
 Comment Actions Artifacts from your Workflow Runs.
@@ -14,21 +7,16 @@ one or more artifacts. This action is heavily inspired by the
 [ReadTheDocs action](https://github.com/readthedocs/actions/tree/main/preview)
 and [download-artifact action](https://github.com/actions/download-artifact)
 
-## Example
-
-![Example of a description edited with link to download
-artifacts](pull-request-example.png)
-
 # Usage
 
 ```yaml
 - uses: PicoCentauri/comment-artifact@main
   with:
-    # Name of artifact defined using the
+    # Name of the artifact to link.
     name:
 
-    # Description of link text that should appear in the updated comment of your
-    # pull request. Default is 'Download artifact for this pull request'
+    # Description of the artifact download link.
+    # Default is 'Download artifact for this pull request'
     description:
 
     # Destination path. Supports basic tilde expansion.
@@ -51,11 +39,16 @@ artifacts](pull-request-example.png)
     run-id:
 ```
 
-To allow the update of the comment change the
-[permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
-of your Github Action to
+> ⚠️ **IMPORTANT**: To allow the update of the comment change the
+> [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
+> of your Github Action to
+>
+> ```yaml
+> permissions:
+>   pull-requests: write
+> ```
 
-```yaml
-permissions:
-  pull-requests: write
-```
+## Example
+
+![Example of a description edited with link to download
+artifacts](pull-request-example.png)
