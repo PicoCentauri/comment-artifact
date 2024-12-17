@@ -1,4 +1,2 @@
-lib/
+__tests__/
 dist/
-node_modules/
-coverage/
