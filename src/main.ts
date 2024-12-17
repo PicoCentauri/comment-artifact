@@ -91,20 +91,21 @@ export async function run(): Promise<void> {
     const oldBody: string = pullRequest.body || ''
     let newBody = ''
 
-    if (!oldBody.includes(messageSeperatorStart)) {
+    const startIndex = oldBody.indexOf(messageSeperatorStart)
+    const endIndex = oldBody.indexOf(messageSeperatorEnd)
+
+    if (startIndex === -1) {
       // First time updating this description
       newBody =
         oldBody + messageSeperatorStart + bodyMessage + messageSeperatorEnd
     } else {
-      // we already updated this description before
-      newBody = oldBody.slice(0, oldBody.indexOf(messageSeperatorStart))
+      // Replace existing section
       newBody =
-        newBody + messageSeperatorStart + bodyMessage + messageSeperatorEnd
-      newBody =
-        newBody +
-        oldBody.slice(
-          oldBody.indexOf(messageSeperatorEnd) + messageSeperatorEnd.length
-        )
+        oldBody.substring(0, startIndex) +
+        messageSeperatorStart +
+        bodyMessage +
+        messageSeperatorEnd +
+        oldBody.substring(endIndex + messageSeperatorEnd.length)
     }
 
     // Update the PR body with newBody
