@@ -72,9 +72,12 @@ export async function run(): Promise<void> {
       `Found named artifact '${inputs.name}' (ID: ${targetArtifact.id}, Size: ${targetArtifact.size})`
     )
 
+    // update PR description
+    
+    const messageSeperatorStart = `\n\n<!-- download-section ${workflowName} ${inputs.name} start -->\n`
     const link = `https://nightly.link/${repositoryOwner}/${repositoryName}/actions/artifacts/${targetArtifact.id}.zip`
     const bodyMessage = `[${inputs.description}](${link})\n`
-    const horizontalLine = `\r\n\r\n<!-- comment-artifact separator start -->\r\n----\r\n<!-- comment-artifact separator end -->`
+    const messageSeperatorEnd = `\n<!-- download-section ${workflowName} ${inputs.name} end -->`
 
     // Get the current pull request number
     const pullRequestNumber = context.issue.number
@@ -88,21 +91,11 @@ export async function run(): Promise<void> {
       repo: repositoryName,
       pull_number: pullRequestNumber
     })
+    
     const oldBody: string = pullRequest.body || ''
     let newBody = ''
 
-    if (oldBody.includes(horizontalLine)) {
-      // First time updating this description -> adding horizontal line
-      newBody = oldBody + horizontalLine
-    } else {
-      // Pull Request description is empty
-      newBody = horizontalLine
-    }
-
-    const messageSeperatorStart = `\r\n\r\n<!-- download-section ${workflowName} ${inputs.name} start -->\r\n`
-    const messageSeperatorEnd = `\r\n<!-- download-section ${workflowName} ${inputs.name} end -->`
-
-    if (oldBody.includes(messageSeperatorStart)) {
+    if (!oldBody.includes(messageSeperatorStart)) {
       // First time updating this description
       newBody =
         oldBody + messageSeperatorStart + bodyMessage + messageSeperatorEnd
