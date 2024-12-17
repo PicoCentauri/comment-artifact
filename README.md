@@ -10,7 +10,7 @@ and [download-artifact action](https://github.com/actions/download-artifact)
 ## Usage
 
 ```yaml
-- uses: PicoCentauri/comment-artifact@main
+- uses: PicoCentauri/comment-artifact@v1
   with:
     # Name of the artifact to link.
     name:
