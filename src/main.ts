@@ -108,6 +108,8 @@ export async function run(): Promise<void> {
         oldBody.substring(endIndex + messageSeperatorEnd.length)
     }
 
+    core.debug(`New body: ${newBody}`)
+
     // Update the PR body with newBody
     await octokit.rest.pulls.update({
       owner: repositoryOwner,
