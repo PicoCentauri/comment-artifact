@@ -35,11 +35,6 @@ artifacts](pull-request-example.png)
     # Optional. Default is $GITHUB_WORKSPACE
     path:
 
-    # A glob pattern to the artifacts that should be downloaded.
-    # Ignored if name is specified.
-    # Optional.
-    pattern:
-
     # The GitHub token used to authenticate with the GitHub API.
     # This is required when downloading artifacts from a different repository or from a different workflow run.
     # Optional. If unspecified, the action will download artifacts from the current repo and the current workflow run.

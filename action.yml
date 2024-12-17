@@ -10,10 +10,6 @@ inputs:
   name:
     description: 'Name of the artifact to link.'
     required: true
-  github-token:
-    description: 'The GitHub token used to authenticate with the GitHub API.'
-    default: 'Download artifact for this pull request'
-    required: false
   description:
     description: 'Description of the artifact download link.'
     default: 'Download artifact for this pull request.'
@@ -22,6 +18,10 @@ inputs:
     description:
       'Destination path. Supports basic tilde expansion. Defaults to
       $GITHUB_WORKSPACE'
+    required: false
+  github-token:
+    description: 'The GitHub token used to authenticate with the GitHub API.'
+    default: ${{ github.token }}
     required: false
   repository:
     description:

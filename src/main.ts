@@ -8,9 +8,9 @@ export async function run(): Promise<void> {
   try {
     const inputs = {
       name: core.getInput('name', { required: true }),
-      token: core.getInput('github-token', { required: false }),
       description: core.getInput('description', { required: false }),
       path: core.getInput('path', { required: false }),
+      token: core.getInput('github-token', { required: false }),
       repository: core.getInput('repository', { required: false }),
       runID: parseInt(core.getInput('run-id', { required: false }))
     }
