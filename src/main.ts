@@ -40,7 +40,7 @@ export async function run(): Promise<void> {
     if (!token) {
       throw new Error('GitHub token is required')
     }
-    
+
     const findBy = {
       token,
       workflowRunId,
