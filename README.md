@@ -22,10 +22,9 @@ artifacts](pull-request-example.png)
 # Usage
 
 ```yaml
-- uses: PicoCentauri/comment-artifact@v1
+- uses: PicoCentauri/comment-artifact@main
   with:
     # Name of artifact defined using the
-    # Default is 'artifact'
     name:
 
     # Description of link text that should appear in the updated comment of your

@@ -9,10 +9,10 @@ branding:
 inputs:
   name:
     description: 'Name of the artifact to link.'
-    default: 'artifact'
     required: true
   github-token:
     description: 'The GitHub token used to authenticate with the GitHub API.'
+    default: 'Download artifact for this pull request'
     required: false
   description:
     description: 'Description of the artifact download link.'
