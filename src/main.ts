@@ -36,8 +36,13 @@ export async function run(): Promise<void> {
       )
     }
 
+    const token = process.env['GITHUB_TOKEN'] || inputs.token
+    if (!token) {
+      throw new Error('GitHub token is required')
+    }
+    
     const findBy = {
-      token: process.env['GITHUB_TOKEN'],
+      token,
       workflowRunId,
       repositoryOwner,
       repositoryName
