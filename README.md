@@ -12,7 +12,7 @@ Comment Actions Artifacts from your Workflow Runs.
 The action automatically edits Pull Requests' descriptions with link to download
 one or more artifacts. This action is heavily inspired by the
 [ReadTheDocs action](https://github.com/readthedocs/actions/tree/main/preview)
-and [download-artofact action](https://github.com/actions/download-artifact)
+and [download-artifact action](https://github.com/actions/download-artifact)
 
 ## Example
 
@@ -57,9 +57,9 @@ artifacts](pull-request-example.png)
     run-id:
 ```
 
-To allow to update the comment update the
+To allow the update of the comment change the
 [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
-of your job to
+of your Github Action to
 
 ```yaml
 permissions:
