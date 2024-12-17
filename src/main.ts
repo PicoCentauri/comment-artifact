@@ -49,19 +49,11 @@ export async function run(): Promise<void> {
 
     const artifact = new DefaultArtifactClient()
 
-    core.info('foo')
-
-    await artifact.getArtifact(inputs.name, {
-      findBy
-    })
-
-    core.info('bar')
+    await artifact.getArtifact(inputs.name, { findBy })
 
     const { artifact: targetArtifact } = await artifact.getArtifact(
       inputs.name,
-      {
-        findBy
-      }
+      { findBy }
     )
 
     if (!targetArtifact) {
@@ -73,7 +65,6 @@ export async function run(): Promise<void> {
     )
 
     // update PR description
-    
     const messageSeperatorStart = `\n\n<!-- download-section ${workflowName} ${inputs.name} start -->\n`
     const link = `https://nightly.link/${repositoryOwner}/${repositoryName}/actions/artifacts/${targetArtifact.id}.zip`
     const bodyMessage = `[${inputs.description}](${link})\n`
@@ -91,7 +82,7 @@ export async function run(): Promise<void> {
       repo: repositoryName,
       pull_number: pullRequestNumber
     })
-    
+
     const oldBody: string = pullRequest.body || ''
     let newBody = ''
 
