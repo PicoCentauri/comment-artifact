@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   test-typescript:
@@ -67,7 +68,11 @@ jobs:
         uses: ./
         with:
           name: artifact
-          token: ${{ secrets.GITHUB_TOKEN }}
-          description: 📚 Download artifact for this pull-request
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rename message without token
+        id: test-action-rename
+        uses: ./
+        with:
+          name: artifact
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          description: Test link to artifact (Run ID ${{ github.run_id }})
