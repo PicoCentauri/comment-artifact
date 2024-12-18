@@ -6,6 +6,11 @@ import { DefaultArtifactClient } from '@actions/artifact'
 
 export async function run(): Promise<void> {
   try {
+    if (!context.payload.pull_request) {
+      core.info('Not a pull request. Skipping action.')
+      return
+    }
+
     const inputs = {
       name: core.getInput('name', { required: true }),
       description: core.getInput('description', { required: false }),
