@@ -4,11 +4,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 1
     groups:
-      actions-minor:
-        update-types:
-          - minor
-          - patch
+      action-dependencies:
+        patterns:
+          - '*'
 
   - package-ecosystem: npm
     directory: /
