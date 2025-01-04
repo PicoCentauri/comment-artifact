@@ -45,13 +45,32 @@ and [download-artifact action](https://github.com/actions/download-artifact)
 
 > [!IMPORTANT]
 >
-> Make sure to give the action the correct
-> [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
+> Make sure grating your action with the correct _write_ >
+> [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs).
+> Either on the root level of a workflow
 >
 > ```yaml
+> name: 'My workflow'
+>
+> on: [push]
 > permissions:
 >   pull-requests: write
+>
+> jobs: ...
 > ```
+>
+> or within job where you want to use the `comment-artifact` action
+>
+> ```yaml
+> jobs:
+>   stale:
+>     runs-on: ubuntu-latest
+>
+>     permissions:
+>       pull-requests: write
+> ```
+>
+> Note that job level permissions will override root level permissions.
 
 ## Example
 

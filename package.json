@@ -1,7 +1,7 @@
 {
   "name": "comment-artifact",
   "description": "Comment artifact link on Pull Request description",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "author": "Philip Loche",
   "private": true,
   "homepage": "https://github.com/PicoCentauri/comment-artifact",
