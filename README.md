@@ -45,9 +45,9 @@ and [download-artifact action](https://github.com/actions/download-artifact)
 
 > [!IMPORTANT]
 >
-> Make sure grating your action with the correct _write_ >
+> Ensure that your action has the correct _write_ >
 > [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs).
-> Either on the root level of a workflow
+> You can set these permissions either at the root level of a workflow:
 >
 > ```yaml
 > name: 'My workflow'
@@ -59,7 +59,8 @@ and [download-artifact action](https://github.com/actions/download-artifact)
 > jobs: ...
 > ```
 >
-> or within job where you want to use the `comment-artifact` action
+> or within the specific job where you want to use the `comment-artifact`
+> action:
 >
 > ```yaml
 > jobs:
@@ -70,7 +71,9 @@ and [download-artifact action](https://github.com/actions/download-artifact)
 >       pull-requests: write
 > ```
 >
-> Note that job level permissions will override root level permissions.
+> Note that job-level permissions override root-level permissions. If you set
+> `pull-requests: write` at the root level and have non-empty permissions at the
+> job level without specifying them there, the action will fail.
 
 ## Example
 
