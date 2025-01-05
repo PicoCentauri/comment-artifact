@@ -79,3 +79,8 @@ and [download-artifact action](https://github.com/actions/download-artifact)
 
 ![Example of a description edited with link to download
 artifacts](pull-request-example.png)
+
+## Contributing
+
+If you want to help improving this action take a look the
+[contributing instructions](./CONTRIBUTING.md).
