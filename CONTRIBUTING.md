@@ -105,7 +105,6 @@ There are a few things to keep in mind when writing your action code:
    to a repository.
 
    The `local-action` utility can be run in the following ways:
-
    - Visual Studio Code Debugger
 
      Make sure to review and, if needed, update
