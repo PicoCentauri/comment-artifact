@@ -46,6 +46,17 @@ export async function run(): Promise<void> {
       throw new Error('GitHub token is required')
     }
 
+    // Check if this is a PR from a fork
+    const prPayload = context.payload.pull_request
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const headRepo = prPayload?.head?.repo?.full_name
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment  
+    const baseRepo = prPayload?.base?.repo?.full_name
+    const isForkPR = Boolean(headRepo && baseRepo && headRepo !== baseRepo)
+    if (isForkPR) {
+      core.warning('This appears to be a pull request from a fork. The action may fail due to GitHub security restrictions that limit token permissions for fork PRs.')
+    }
+
     const findBy = {
       token,
       workflowRunId,
@@ -84,14 +95,26 @@ export async function run(): Promise<void> {
     const pullRequestNumber = context.issue.number
 
     // Initialize octokit
-    const octokit = getOctokit(inputs.token)
+    const octokit = getOctokit(token)
 
-    // Fetch the current body of the pull request
-    const { data: pullRequest } = await octokit.rest.pulls.get({
-      owner: repositoryOwner,
-      repo: repositoryName,
-      pull_number: pullRequestNumber
-    })
+    let pullRequest
+    try {
+      // Fetch the current body of the pull request
+      const response = await octokit.rest.pulls.get({
+        owner: repositoryOwner,
+        repo: repositoryName,
+        pull_number: pullRequestNumber
+      })
+      pullRequest = response.data
+    } catch (error) {
+      if (error instanceof Error && 'status' in error && error.status === 403) {
+        throw new Error(
+          'Insufficient permissions to access pull request. This often happens with pull requests from forks. ' +
+          'Consider using pull_request_target event or providing a token with appropriate permissions.'
+        )
+      }
+      throw error
+    }
 
     const oldBody: string = pullRequest.body || ''
     let newBody = ''
@@ -115,13 +138,23 @@ export async function run(): Promise<void> {
 
     core.debug(`New body: ${newBody}`)
 
-    // Update the PR body with newBody
-    await octokit.rest.pulls.update({
-      owner: repositoryOwner,
-      repo: repositoryName,
-      pull_number: pullRequestNumber,
-      body: newBody
-    })
+    try {
+      // Update the PR body with newBody
+      await octokit.rest.pulls.update({
+        owner: repositoryOwner,
+        repo: repositoryName,
+        pull_number: pullRequestNumber,
+        body: newBody
+      })
+    } catch (error) {
+      if (error instanceof Error && 'status' in error && error.status === 403) {
+        throw new Error(
+          'Insufficient permissions to update pull request. This often happens with pull requests from forks. ' +
+          'Consider using pull_request_target event or providing a token with write permissions to pull-requests.'
+        )
+      }
+      throw error
+    }
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
