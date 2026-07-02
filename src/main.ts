@@ -75,10 +75,10 @@ export async function run(): Promise<void> {
     )
 
     // update PR description
-    const messageSeperatorStart = `\n\n<!-- download-section ${workflowName} ${inputs.name} start -->\n`
+    const startMarker = `<!-- download-section ${workflowName} ${inputs.name} start -->`
+    const endMarker = `<!-- download-section ${workflowName} ${inputs.name} end -->`
     const link = `https://nightly.link/${repositoryOwner}/${repositoryName}/actions/artifacts/${targetArtifact.id}.zip`
-    const bodyMessage = `[${inputs.description}](${link})\n`
-    const messageSeperatorEnd = `\n<!-- download-section ${workflowName} ${inputs.name} end -->`
+    const bodyLine = `[${inputs.description}](${link})`
 
     // Get the current pull request number
     const pullRequestNumber = context.issue.number
@@ -93,24 +93,25 @@ export async function run(): Promise<void> {
       pull_number: pullRequestNumber
     })
 
-    const oldBody: string = pullRequest.body || ''
+    // Normalize line endings to avoid \r\n vs \n mismatches
+    const oldBody: string = (pullRequest.body || '').replace(/\r\n/g, '\n')
     let newBody = ''
 
-    const startIndex = oldBody.indexOf(messageSeperatorStart)
-    const endIndex = oldBody.indexOf(messageSeperatorEnd)
+    // Search for the marker without relying on leading newlines,
+    // since the body may have been edited or normalized between runs
+    const startIndex = oldBody.indexOf(`\n${startMarker}\n`)
+    const endIndex = oldBody.indexOf(`\n${endMarker}`)
 
     if (startIndex === -1) {
-      // First time updating this description
-      newBody =
-        oldBody + messageSeperatorStart + bodyMessage + messageSeperatorEnd
+      // First time — append new section
+      const separator = oldBody === '' ? '' : '\n\n'
+      newBody = `${oldBody}${separator}\n${startMarker}\n${bodyLine}\n${endMarker}`
     } else {
-      // Replace existing section
+      // Replace existing section in place
       newBody =
         oldBody.substring(0, startIndex) +
-        messageSeperatorStart +
-        bodyMessage +
-        messageSeperatorEnd +
-        oldBody.substring(endIndex + messageSeperatorEnd.length)
+        `\n${startMarker}\n${bodyLine}\n${endMarker}` +
+        oldBody.substring(endIndex + `\n${endMarker}`.length)
     }
 
     core.debug(`New body: ${newBody}`)
