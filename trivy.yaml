@@ -1,0 +1,7 @@
+# See: https://trivy.dev/docs/references/configuration/config-file/
+
+scan:
+  skip-dirs:
+    - dist
+    - node_modules
+    - coverage
