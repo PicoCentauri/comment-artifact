@@ -59,8 +59,6 @@ export async function run(): Promise<void> {
 
     const artifact = new DefaultArtifactClient()
 
-    await artifact.getArtifact(inputs.name, { findBy })
-
     const { artifact: targetArtifact } = await artifact.getArtifact(
       inputs.name,
       { findBy }
@@ -124,7 +122,18 @@ export async function run(): Promise<void> {
       body: newBody
     })
   } catch (error) {
-    // Fail the workflow run if an error occurs
+    if (
+      error instanceof Error &&
+      'status' in error &&
+      (error as { status: number }).status === 403
+    ) {
+      core.warning(
+        'Unable to update the pull request description: insufficient ' +
+          'permissions. For pull requests from forks, the GITHUB_TOKEN ' +
+          'does not have write access to the base repository.'
+      )
+      return
+    }
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
